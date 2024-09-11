@@ -27,12 +27,12 @@ export async function POST(request: Request, { params }: { params: { id_usuario:
       return new Response(JSON.stringify({ message: 'ID de usuário inválido' }), { status: 400 });
     }
     
-    const { nomeProjeto, descricaoProjeto} = await request.json();
+    const { nome, descricao} = await request.json();
     
     const newProject = await prisma.projetos.create({
       data: {
-          nome: nomeProjeto,
-          descricao: descricaoProjeto,
+          nome: nome,
+          descricao: descricao,
           data_criacao: new Date(),
           usuarios_has_projetos: {
               create: {

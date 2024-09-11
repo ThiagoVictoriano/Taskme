@@ -23,7 +23,7 @@ model convites {
   id_convite                                       Int      @id @default(autoincrement())
   data_convite                                     DateTime @db.Date
   status                                           Int      @default(1)
-  data_resposta                                    DateTime @db.Date
+  data_resposta                                    DateTime? @db.Date
   id_usuario_convidado                             Int
   id_usuario_iniciador                             Int
   id_projeto                                       Int
@@ -56,8 +56,8 @@ model tarefas {
   id_projeto   Int
   id_usuario   Int
   comentarios  comentarios[]
-  projetos     projetos      @relation(fields: [id_projeto], references: [id_projeto], onDelete: NoAction, onUpdate: NoAction, map: "fk_Tarefas_Projetos1")
-  usuarios     usuarios      @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_Tarefas_Usuarios1")
+  projetos     projetos      @relation(fields: [id_projeto], references: [id_projeto], onDelete: Cascade, onUpdate: Cascade, map: "fk_Tarefas_Projetos1")
+  usuarios     usuarios      @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade, onUpdate: Cascade, map: "fk_Tarefas_Usuarios1")
 
   @@index([id_projeto], map: "fk_Tarefas_Projetos1_idx")
   @@index([id_usuario], map: "fk_Tarefas_Usuarios1_idx")
@@ -79,8 +79,8 @@ model usuarios_has_projetos {
   id_usuario Int
   id_projeto Int
   papel      String   @db.VarChar(45)
-  projetos   projetos @relation(fields: [id_projeto], references: [id_projeto], onDelete: NoAction, onUpdate: NoAction, map: "fk_Usuarios_has_Projetos_Projetos1")
-  usuarios   usuarios @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_Usuarios_has_Projetos_Usuarios")
+  projetos   projetos @relation(fields: [id_projeto], references: [id_projeto], onDelete: Cascade, onUpdate: Cascade, map: "fk_Usuarios_has_Projetos_Projetos1")
+  usuarios   usuarios @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade, onUpdate: Cascade, map: "fk_Usuarios_has_Projetos_Usuarios")
 
   @@id([id_usuario, id_projeto])
   @@index([id_projeto], map: "fk_Usuarios_has_Projetos_Projetos1_idx")
