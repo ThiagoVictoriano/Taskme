@@ -1,21 +1,17 @@
 import { NextResponse } from 'next/server';
 import prisma from "../../../../lib/db";
 
-export async function GET(request: Request, { params }: { params: { id_usuario: string, id_projeto: string } }) {
-    const id_projeto = parseInt(params.id_projeto, 10);
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+    const id_projeto = parseInt(params.id, 10);
 
-    if (isNaN(id_projeto) || id_projeto === 0) {
+    if (isNaN(id_projeto)) {
         return new Response(JSON.stringify({ message: 'ID de projeto inválido' }), { status: 400 });
       }
 
       const projeto = await prisma.projetos.findFirst({
         where: {
-          usuarios_has_projetos: {
-            some: {
               id_projeto: id_projeto
-            }
-          }
-        },
+            },
         include: {
           usuarios_has_projetos: {
             select: {
@@ -29,12 +25,11 @@ export async function GET(request: Request, { params }: { params: { id_usuario: 
     return NextResponse.json({projeto})
 }
 
-export async function POST(request: Request, { params }: { params: { id_usuario: string, id_projeto: string } }) {
-  const id_usuario = parseInt(params.id_usuario); // Captura o ID do usuário na URL
-  const id_projeto = parseInt(params.id_projeto);
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const id_projeto = parseInt(params.id);
 
   try {
-    const { papel } = await request.json();
+    const { papel, id_usuario } = await request.json();
 
     if (!papel) {
       return new Response(
@@ -81,15 +76,16 @@ export async function PUT(request: Request, { params }: { params: { id_projeto: 
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id_projeto: string, id_usuario: string} }) {
-  const id_projeto = parseInt(params.id_projeto, 10);
-  const id_usuario = parseInt(params.id_usuario, 10);
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  const id_projeto = parseInt(params.id, 10);
 
   if (isNaN(id_projeto) || id_projeto === 0) {
     return new Response(JSON.stringify({ message: 'ID de projeto inválido' }), { status: 400 });
   }
 
   try {
+    const { id_usuario } = await request.json();
+
     const userProject = await prisma.usuarios_has_projetos.findFirst({
       where: {
         id_projeto: id_projeto,

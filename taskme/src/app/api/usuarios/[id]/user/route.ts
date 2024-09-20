@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from "../../../lib/db";
+import prisma from "../../../../lib/db";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const id = params.id; // Captura o ID do usuário na URL

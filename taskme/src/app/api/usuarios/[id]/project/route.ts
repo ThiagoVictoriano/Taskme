@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import prisma from "../../../lib/db";
+import prisma from "../../../../lib/db";
 
-export async function GET(request: Request, { params }: { params: { id_usuario: string } }) {
-    const id = parseInt(params.id_usuario); // Captura o ID do usuário na URL
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id); // Captura o ID do usuário na URL
 
     if (isNaN(id) || id === 0) {
         return new Response(JSON.stringify({ message: 'ID de usuário inválido' }), { status: 400 });
@@ -20,8 +20,8 @@ export async function GET(request: Request, { params }: { params: { id_usuario: 
     return NextResponse.json({projetos})
 }
 
-export async function POST(request: Request, { params }: { params: { id_usuario: string } }) {
-    const id = parseInt(params.id_usuario); // Captura o ID do usuário na URL
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id); // Captura o ID do usuário na URL
 
     if (isNaN(id) || id === 0) {
       return new Response(JSON.stringify({ message: 'ID de usuário inválido' }), { status: 400 });

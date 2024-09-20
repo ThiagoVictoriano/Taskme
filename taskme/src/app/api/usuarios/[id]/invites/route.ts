@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server';
-import prisma from "../../../lib/db";
+import prisma from "../../../../lib/db";
 
-export async function GET(request: Request, { params }: { params: { id_usuario: string } }) {
-    const id = parseInt(params.id_usuario, 10); // Captura o ID do usuário na URL
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+    const id_usuario = parseInt(params.id, 10); // Captura o ID do usuário na URL
 
-    if (isNaN(id)) {
+    if (isNaN(id_usuario)) {
         return NextResponse.json({ message: 'ID de usuário inválido' }, { status: 400 });
     }
 
     const convites = await prisma.convites.findMany({
         where: { 
             OR: [
-                { id_usuario_convidado: id },
-                { id_usuario_iniciador: id }
+                { id_usuario_convidado: id_usuario },
+                { id_usuario_iniciador: id_usuario }
             ]
         }
     });
@@ -24,8 +24,8 @@ export async function GET(request: Request, { params }: { params: { id_usuario: 
     return NextResponse.json({ convites });
 }
 
-export async function POST(request: Request, { params }: { params: { id_usuario: string } }) {
-    const id_iniciador = parseInt(params.id_usuario, 10); // Captura o ID do usuário na URL
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+    const id_iniciador = parseInt(params.id, 10); // Captura o ID do usuário na URL
 
     try {
         const { id_convidado, id_projeto } = await request.json();
@@ -104,7 +104,7 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
 
     try {
-        const { id_convite} = await request.json();
+        const {id_convite} = await request.json();
 
         await prisma.convites.delete({
             where: { id_convite: parseInt(id_convite) }
